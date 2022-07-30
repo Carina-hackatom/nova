@@ -1,0 +1,24 @@
+vue/node_modules
+vue/dist
+release/
+.idea/
+.vscode/
+.DS_Store
+/build/
+
+# ignore logs
+*.log
+
+# ignore coverage report
+coverage.txt
+coverage.html
+
+# swagger tmp
+tmp-swagger-gen
+
+# scripts
+/scripts/run_test_node.sh
+/scripts/protogen-api.sh
+/scripts/protogen
+/scripts/protogen.sh
+

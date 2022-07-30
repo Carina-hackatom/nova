@@ -1,0 +1,68 @@
+syntax = "proto3";
+package nova.gal.v1;
+
+import "nova/gal/v1/params.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/Carina-hackatom/nova/x/gal/types";
+
+// GenesisState defines the gal module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated DepositAccount deposit_accounts = 2;
+  repeated WithdrawInfo withdraw_info = 3;
+}
+
+// DepositAccount defines snToken's total share and deposit information.
+message DepositAccount {
+  string denom = 1;
+  repeated DepositInfo deposit_infos = 2;
+  int64 total_share = 3;
+  int64 last_block_update = 4;
+}
+
+// DepositInfo defines user address, share and debt.
+message DepositInfo {
+  string address = 1;
+  int64 share = 2;
+  int64 debt = 3;
+}
+
+message DepositRecord {
+  string zone_id = 1;
+  string address = 2;
+  repeated DepositRecordContent records = 3;
+}
+
+message DepositRecordContent {
+  cosmos.base.v1beta1.Coin amount = 1;
+  int64 block_height = 2;
+  int64 state = 3;
+}
+
+message WithdrawInfo {
+  string address = 1;
+  string denom = 2;
+  int64 amount = 3;
+  google.protobuf.Timestamp completion_time = 4[(gogoproto.nullable) = false, (gogoproto.stdtime)= true];
+}
+
+message UndelegateRecord {
+  string zone_id = 1;
+  string delegator = 2;
+  cosmos.base.v1beta1.Coin amount = 3;
+  int64 state = 4;
+}
+
+message WithdrawRecord {
+  string zone_id = 1;
+  string withdrawer = 2;
+  string recipient = 3;
+  cosmos.base.v1beta1.Coin amount = 4;
+  int64 state = 5;
+  google.protobuf.Timestamp completion_time = 6[(gogoproto.nullable) = false, (gogoproto.stdtime)= true];
+}

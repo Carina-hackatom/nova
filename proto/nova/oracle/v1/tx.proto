@@ -1,0 +1,38 @@
+syntax = "proto3";
+package nova.oracle.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/Carina-hackatom/nova/x/oracle/types";
+
+service Msg {
+  rpc UpdateChainState(MsgUpdateChainState) returns (MsgUpdateChainStateResponse);
+}
+
+message MsgUpdateChainState {
+  // coin refers to the sum of owned, staked and claimable quantity of the coin
+  cosmos.base.v1beta1.Coin coin = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // decimal of the native currency in host chain.
+  uint32 decimal = 2;
+
+  // address of the oracle
+  string operator = 3;
+
+  // block_height of the block fetched by oracle from host_chain
+  int64 block_height = 4;
+
+  // app_hash of the block fetched by oracle from host chain
+  bytes app_hash = 5;
+
+  // chain_id of the host chain
+  string chain_id = 6;
+}
+
+message MsgUpdateChainStateResponse {
+  bool success = 1;
+}

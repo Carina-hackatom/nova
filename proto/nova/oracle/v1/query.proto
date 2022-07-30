@@ -1,0 +1,44 @@
+syntax = "proto3";
+package nova.oracle.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+
+import "nova/oracle/v1/params.proto";
+
+
+option go_package = "github.com/Carina-hackatom/nova/x/oracle/types";
+
+service Query {
+  // Params returns the total set of minting parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/nova/oracle/v1/params";
+  }
+
+  rpc State(QueryStateRequest) returns (QueryStateResponse) {
+    option (google.api.http).get = "/nova/oracle/v1/state";
+  }
+}
+
+message QueryParamsRequest {}
+message QueryParamsResponse {
+  // params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+message QueryStateRequest {
+  string chain_denom = 1 [ (gogoproto.moretags) = "yaml:\"chain_denom\"" ];
+}
+message QueryStateResponse {
+  cosmos.base.v1beta1.Coin coin = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.moretags) = "yaml:\"coin\"",
+    (gogoproto.nullable) = false
+  ];
+  string operator = 2 [ (gogoproto.moretags) = "yaml:\"operator\"" ];
+  uint32 decimal = 3 [ (gogoproto.moretags) = "yaml:\"decimal\"" ];
+  int64 last_block_height = 4 [ (gogoproto.moretags) = "yaml:\"last_block_height\"" ];
+  bytes app_hash = 5 [ (gogoproto.moretags) = "yaml:\"app_hash\"" ];
+  string chain_id = 6 [ (gogoproto.moretags) = "yaml:\"chain_id\"" ];
+}
